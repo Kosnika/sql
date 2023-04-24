@@ -1,0 +1,145 @@
+create database clinika;
+go
+use clinika;
+go
+
+create schema sep222_3;
+go
+
+
+drop table if exists sep222_3.departments;
+go 
+create table sep222_3.departments (
+id_dep int identity(1,1) primary key,
+building int not null check(building>=1 and building<=5),   --constrain 
+name_otdel varchar(100) unique not null,
+);
+go
+
+insert into sep222_3.departments(building, name_otdel)
+values
+  (1, 'obshaya hirurgiya'),
+  (1,'oftalmologiya'),
+  (2, 'pediatrya'),
+  (2, 'lor');
+  go
+select * from sep222_3.departments;
+go
+
+drop table if exists sep222_3.surveys;
+go 
+create table sep222_3.surveys (
+id_sur int identity(1,1) primary key,
+nameof varchar(100) not null unique,
+id_dep int references sep222_3.departments(id_dep) --foreign key
+);
+go
+
+
+insert into sep222_3.surveys (nameof, id_dep)
+values
+  ('perelom nogi', 1),
+  ('perelom ruki',1),
+  ('profosmotr', 4),
+  ('osmotr glas', 2);
+  go 
+
+select * from sep222_3.departments;
+go
+
+select e.iin, e.dayof, e.timeof, d.secondname + ' ' + d.firstname as Doctor, s.nameof, dep.name_otdel, e.summary
+from sep222_3.exam e
+join sep222_3.doctors d
+on e.FK_doc=d.id_doc
+join sep222_3.surveys s 
+on e.FK_sur = s.id_sur
+join sep222_3.departments dep 
+on s.id_dep = dep.id_dep
+
+join sep222_3.specialization spec
+on d.id_spe = spec.id_spe
+
+
+drop table if exists sep222_3.specialization;
+go 
+create table sep222_3.specialization (
+id_spe int identity(1,1) primary key,
+specialization varchar(80) not null,
+);
+go
+
+insert into sep222_3.specialization(specialization)
+values 
+  ('Hirurg'),
+  ('Pediatr'),
+  ('Lor'),
+  ('Oftalmolog');
+
+select * from sep222_3.specialization;
+go
+
+
+
+drop table if exists sep222_3.diseases;
+go
+create table sep222_3.diseases (
+id_dis int identity(1,1),
+nameof varchar(100) not null unique,
+difficult int default(1) check (difficult >=1),
+primary key pk_11 (id_dis, difficult)
+);
+go
+
+insert into sep222_3(nameof)
+values 
+  ('gluchota'),
+  ('ploskostopie'),
+  ('koronavirus'),
+  ('gryzha'),
+  ('orz');
+  go
+select * from sep222_3.diseases;
+go
+
+create table sep222_3.doctors (
+id_doc int identity(1,1) primary key,
+id_dep int references sep222_3.departments (id_dep),
+id_spe int references sep222_3.specialization (id_spe),
+firstname varchar(50) not null,
+secondname varchar(50) not null,
+salary money not null check (salary > 0)
+)
+
+insert into sep222_3.doctors(id_dep, id_spe, firstname, secondname, salary)
+values --ссылочные поля с айди нельзя вводить от фонаря
+  (1, 2, 'pavlov', 'ivan', 356000),
+  (1,1, 'Ananov', 'Adet', 450000),
+  (2,3, 'Pirogova', 'Tatyana', 500000),
+  (2,4, 'pastuchov', 'arlan', 500000);
+  go
+select * from sep222_3.doctors;
+go
+
+drop table if exists sep222_3.examinations;
+go
+create table sep222_3.examinations (
+id_exa int identity(1,1) primary key,
+iin varchar(12) not null,  --double
+dayof data not null, 
+timeof varchar(11) not null, 
+FK_sur int references sep222_3.surveys(id_sur),
+FK_doc int references sep222_3.doctors(id_doc),
+summary varchar(250) not null
+);
+
+insert into sep222_3.examinations(iin,dayof, timeof, FK_sur, FK_doc)
+values
+    ('090806300234', '12-23-2022', '09:00-09:15', 1, 2, 'sdsadasda'),
+    ('324235353466', '09-22-2019', '10:00-10:25', 2, 3, 'rfgrgrtgrt'),
+    ('532356475654', '08-14-2021', '08:40-09:00', 3, 1, 'etgfdgfgdgfg');
+    go
+    select * from sep222_3.examinations;
+    go
+    
+select firstname + ' ' + secondname as doctors
+from sep222_3 doctors
