@@ -1,0 +1,19 @@
+create table dbo.Employees
+(
+  EmployeesID int primary key,
+  lastname nvarchar(25),
+  firstname nvarchar(25)
+);
+GO
+insert into dbo.Employees 
+  (EmployeesID, lastname, firstname)
+values 
+  (121, 'hello', 'world'),
+  (200, 'lol', 'bitcs');
+GO
+
+select * from dbo.Employees;
+GO
+
+
+
