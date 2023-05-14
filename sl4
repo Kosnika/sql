@@ -1,0 +1,62 @@
+create index Nindex on people(name);
+ select * from people; 
+drop index Nindex on people;
+
+create table magaz(
+	id int identity(1,1) not null,
+	title varchar(100),
+	price int,
+	primary key(id)
+);
+
+drop table orders;
+create table orders (
+	id int identity(1,1) not null,
+	ord_num int,
+	magaz_id int,
+	person_id int, 
+	date_time datetime default current_timestamp,
+	primary key(id),
+
+	foreign key(magaz_id) references magaz(id),
+	foreign key(person_id) references people(id)
+);
+
+
+insert into magaz(title, price) 
+values ('Phone', 500),
+		('Watch', 100),
+		('Computer', 600),
+		('Tablet', 200),
+		('TV',400),
+		('Calculator',10);
+select * from magaz;
+select * from people;
+select * from orders;
+drop table orders;
+insert into orders(ord_num, magaz_id,person_id) 
+values (0001, 2, 1),				
+		(0010, 3, 3),
+		(0023, 5, 7),
+		(0058, 6, 1),
+		(006, 1, 6),
+		(0100, 4, 8);
+		
+select magaz.title, people.name, people.email
+from people
+
+inner join orders on people.id = orders.person_id
+inner join magaz on magaz.id = orders.magaz_id
+order by orders.ord_num desc;
+
+
+
+
+select people.name, orders.ord_num 
+from people
+left join orders on people.id = orders.person_id 
+
+select orders.date_time, people.name 
+from orders
+
+right join people on orders.person_id = people.id;
