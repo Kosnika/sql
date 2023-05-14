@@ -1,0 +1,38 @@
+use shop;
+
+drop table people;
+
+create table people(
+	id int identity(1,1) not null,
+	name varchar(30),
+	email varchar(40),
+	bio text,
+	birth date not null,
+	primary key(id)
+);
+
+ALTER TABLE people ADD pass VARCHAR(32);
+ALTER TABLE PEOPLE DROP COLUMN pass;
+
+INSERT INTO people (name, bio, birth, email) 
+VALUES('Alexei', 'programmer', '2050-04-04', 'test@mail.ru')
+
+SELECT * FROM people;
+
+--INSERT INTO people (name, email) 
+--VALUES('Petr','example@gmail.com')
+--ALTER TABLE people CHANGE birth birth DATE NOT NULL;
+
+INSERT INTO people (name, birth) VALUES('Bob', '04-05-2007');
+
+INSERT INTO people (name, email, birth) 
+VALUES 
+('Tomiris', 'normuchamedova@mail.ru', '2007-05-25'),
+('Margo', 'outside@gmail.com', '2007-10-24'),
+('Liza', 'igolka@mail.ru', '2007-08-21');
+
+UPDATE people SET name = 'Max' WHERE id = 3;
+UPDATE people SET name = 'Kira', email = 'fanfic@mail.ru' WHERE name = 'Alexei';
+
+-- where id >4;
+--update people set bio = 'something' where name = 'Max' and id = 5;
