@@ -1,0 +1,31 @@
+select * from people;
+
+select name, bio from people;
+
+select id, name from people where id >= 2 and id <4;
+
+select * from people 
+where id <> 3 and id <> 1 and bio is NULL; --   <> не равно -- is NOT
+
+select * from people where name = 'Tomiris' or id = 7;
+
+select distinct name from people;  -- no repeat 
+
+--select * from people limit 2  -- только две записи 
+-- select * from people limit 2, 3 -- пропускаем 2 записи, выводим 3
+
+select * from people order by name;  -- сортировка 
+
+-- where -> order by -> limit 
+
+select * from people order by birth;
+select * from people order by id DESC; -- сортировка в обратную сторону  
+
+select * from people where id between 2 and 6 and id <>4 order by id desc;
+
+select * from people where id in(6,5,8);
+
+select * from people where name like 'T%';  -- начинается с...
+                                    --'%Mar'  --  ищем где-то внутри 
+
+
