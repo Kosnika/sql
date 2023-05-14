@@ -1,0 +1,25 @@
+use shop;
+go
+
+create table test (
+	id int identity(1,1) not null,
+	some_text text,
+	some_field varchar(36),
+	primary key(id)
+
+);
+
+insert into test(some_text, some_field) values
+('just text 0', 'texxt 0'),
+('just text 1', 'texxt 1'),
+('just text 2', 'texxt 2');
+
+select * from test;
+
+--delete from test where id > 0;
+
+--delete from test;   -- TO DELETE AL FIELDS  
+-- update test set some_text = 'hello world' where test, id = 1;
+truncate table test;
+drop table test;
+
