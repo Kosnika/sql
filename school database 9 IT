@@ -1,0 +1,44 @@
+use school; 
+go 
+drop table if exists pupils;
+
+create table pupils(
+	id int identity(1,1) primary key, 
+	id_t int, 
+	name varchar(30),
+	age int,
+	hobbi varchar(30)
+	foreign key(id_t) references teachers(id)
+);
+
+insert into pupils(name, age, hobbi, id_t)
+values 
+('Tomiris', 15, 'tennis', 2),
+('Aidana', 15, 'dance', 3),
+('Abyl', 15, 'swim', 4),
+('Alen', 15, 'edit', 4),
+('Aruzhan', 16, 'volleyball', 2),
+('Narmin', 14, 'games', 3),
+('Arlan', 15, 'maths', 1);
+
+select* from pupils;
+select* from teachers;
+drop table  if exists teachers;
+create table teachers(
+	id int identity(1,1) primary key,
+	name_t varchar(30),
+	sub varchar(30),
+	class int, 
+);
+
+
+insert into teachers(name_t,sub, class )
+values 
+('michael', 'IT', 409),
+ ('lilia', 'maths', 314),
+ ('Tolya', 'physics', 207),
+ ('Irina', 'biology', 108),
+ ('Oksana', 'chemistry', 309);
+
+ select name, name_t, sub from pupils
+ join teachers on teachers.id = pupils.id_t
