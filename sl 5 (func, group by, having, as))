@@ -1,0 +1,17 @@
+use shop; 
+select name as 'vorname', birth as 'tag' from people;
+
+select concat('Imya: ', name, '. Dr: ', birth)  as 'info' from people;
+
+
+select p.id, p.name, m.title, m.price from people as p, magaz as m;
+
+select count(id) from magaz;
+select min(price) from magaz;
+select max(price) from magaz;
+select avg(price) from magaz;
+select sum(price) from magaz;
+select UPPER(title), LOWER(title) from magaz;
+
+select price, count(price) as 'qt' from magaz
+group by price having count(price) > 0;
