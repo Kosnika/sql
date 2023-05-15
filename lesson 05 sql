@@ -1,0 +1,39 @@
+
+
+  select e.empid, e.lastname, e.firstname, e.title, e.mgrid, 
+  concat(e.lastname, e.firstname) as 'information' 
+  from HR.Employees as e
+  join HR.Employees as m 
+  on e.mgrid = m.mgrid;
+  -------------2---
+  select e.empid, e.lastname, e.firstname, e.title, e.mgrid, 
+  concat(e.lastname, e.firstname) as 'information' 
+  from HR.Employees as e
+  right join HR.Employees as m 
+  on e.empid = m.mgrid;
+  
+  
+
+--select empid, lastname, firstname, title, mgrid, 
+--concat(lastname,' ', firstname) as 'Information'
+--from HR.Employees
+---select empid, lastname, firstname, title, mgrid from HR.Employees
+
+
+
+select sup.companyname, sup.country, sup.city,
+c.custid, c.companyname, o.orderid, o.orderdate, o.shipcountry, o.shipcity,
+cat.categoryname, od.qty
+from Sales.Customers c
+join Sales.orders o
+on c.custid=o.custid
+join sales.orderdetails as od
+on o.orderid=od.orderid
+join Production.Products pr
+on od.productid=pr.productid
+join Production.Categories cat
+on pr.categoryid=cat.categoryid
+join Production.Suppliers sup
+on pr.supplierid=sup.supplierid; 
+
+
