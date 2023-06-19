@@ -1,0 +1,178 @@
+USE AdventureWorks;
+GO
+-- Step 2a: THIS WILL FAIL, since some columns are not aggregated
+-- and there is no explicit GROUP BY clause
+SELECT SalesOrderID, ProductID, AVG(UnitPrice), MIN(OrderQty), MAX(UnitPriceDiscount)
+FROM Sales.SalesOrderDetail;
+-- Step 2b: Select and execute the following query to show
+-- This will succeed and return the AVG/MIN/MAX of all rows:
+select AVG(UnitPrice), MIN(OrderQty), MAX(UnitPriceDiscount)
+FROM Sales.SalesOrderDetail;
+SELECT MIN(Name) as first_territory, MAX(Name) as last_territory
+FROM Sales.SalesTerritory;
+SELECT MIN(OrderDate)AS earliest_order,
+MAX(OrderDate) AS latest_order
+FROM Sales.SalesOrderHeader;
+SELECT YEAR(OrderDate) AS order_year,
+COUNT(CustomerID) as all_customers,
+COUNT(DISTINCT CustomerID) as unique_customers
+FROM Sales.SalesOrderHeader
+GROUP BY YEAR(OrderDate);
+SELECT DISTINCT SalesPersonID
+FROM Sales.SalesOrderHeader
+ORDER BY SalesPersonID;
+SELECT MIN(SalesPersonID) AS lowest_sales_person_id, MAX(SalesPersonID) AS highest_sales_person_id, 
+COUNT(SalesPersonID) AS count_sales_person_id, COUNT(*) AS COUNT_all
+FROM Sales.SalesOrderHeader;
+CREATE TABLE dbo.t1(
+	c1 INT IDENTITY NOT NULL PRIMARY KEY,
+	c2 INT NULL);
+
+-- Step 3b: Populate it	
+INSERT INTO dbo.t1(c2)
+VALUES(NULL),(10),(20),(30),(40),(50);
+
+-- Step 3c: View the contents. Note the NULL
+SELECT c1, c2
+FROM dbo.t1;
+
+SELECT SUM(c2) AS sum_nonnulls, COUNT(*)AS count_all_rows, COUNT(c2)AS count_nonnulls, AVG(c2) AS [avg], (SUM(c2)/COUNT(*))AS arith_avg
+FROM dbo.t1;
+DROP TABLE t1;
+
+CREATE TABLE dbo.t2
+    (
+      c1 INT IDENTITY NOT NULL PRIMARY KEY,
+      c2 INT NULL
+    );
+INSERT INTO dbo.t2
+VALUES(1),(10),(1),(NULL),(1),(10),(1),(NULL),(1),(10),(1),(10);
+SELECT c1, c2
+FROM dbo.t2;
+SELECT AVG(c2) AS AvgWithNULLs, AVG(COALESCE(c2,0)) AS AvgWithNULLReplace
+FROM dbo.t2;
+DROP TABLE dbo.t2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USE AdventureWorks;
+GO
+SELECT SalesPersonID, COUNT(*) AS Total_Orders
+FROM Sales.SalesOrderHeader
+GROUP BY SalesPersonID
+ORDER BY Total_Orders asc;
+SELECT CustomerID, YEAR(OrderDate) AS [year], COUNT(*) AS Total_Orders
+FROM Sales.SalesOrderHeader
+WHERE SalesPersonID = 285
+GROUP BY CustomerID, YEAR(OrderDate);
+SELECT SalesOrderID, SalesPersonID, CustomerID
+FROM Sales.SalesOrderHeader;
+
+SELECT SalesOrderID, SalesPersonID, CustomerID
+FROM Sales.SalesOrderHeader
+WHERE CustomerID IN (29777, 30010);
+
+SELECT SalesPersonID, COUNT(*)
+FROM Sales.SalesOrderHeader
+WHERE CustomerID IN (29777, 30010)
+GROUP BY SalesPersonID;
+SELECT CustomerID, COUNT(*) AS Total_Orders
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID;
+SELECT ProductID, MAX(OrderQty) AS largest_order
+FROM Sales.SalesOrderDetail
+GROUP BY productid;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USE AdventureWorks;
+GO
+SELECT CustomerID, COUNT(*) AS count_orders
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID;
+SELECT CustomerID, COUNT(*) AS count_orders
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID
+HAVING COUNT(*) >= 10
+
+-- Step 2c: Review the logical order of operations
+-- the column alias for COUNT(*) hasn't been processed yet
+-- when HAVING refers to it
+-- THIS WILL FAIL
+SELECT CustomerID, COUNT(*) AS count_orders
+FROM Sales.SalesOrderHeader
+GROUP BY CustomerID
+HAVING count_orders >= 10
+
+SELECT COUNT(*) AS cnt, AVG(OrderQty) AS [avg_qty]
+FROM Production.Product AS p
+JOIN Sales.SalesOrderDetail AS od
+	ON p.productid = od.productid
+WHERE od.OrderQty > 20
+GROUP BY p.ProductLine;
+
+SELECT COUNT(*) AS cnt, AVG(OrderQty) AS [avg_qty]
+FROM Production.Product AS p
+JOIN Sales.SalesOrderDetail AS od
+	ON p.productid = od.productid
+GROUP BY p.ProductLine
+HAVING AVG(OrderQty) > 20;
+
+SELECT c.CustomerID, COUNT(*) AS No_Of_Orders
+FROM Sales.Customer AS c
+JOIN Sales.SalesOrderHeader AS o
+ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID
+ORDER BY No_Of_Orders DESC;
+
+SELECT c.CustomerID, COUNT(*) AS No_Of_Orders
+FROM Sales.Customer AS c
+JOIN Sales.SalesOrderHeader AS o
+ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerID
+HAVING COUNT(*) > 20
+ORDER BY No_Of_Orders DESC;
+
+SELECT p.ProductID, COUNT(*) AS cnt
+FROM Production.Product AS p
+JOIN Sales.SalesOrderDetail AS od
+ON p.ProductID = od.Productid
+GROUP BY p.ProductID
+ORDER BY cnt DESC;
+
+SELECT p.ProductID, COUNT(*) AS cnt
+FROM Production.Product AS p
+JOIN Sales.SalesOrderDetail AS od
+ON p.ProductID = od.Productid
+GROUP BY p.ProductID
+HAVING COUNT(*) < 20
+ORDER BY cnt DESC;
