@@ -1,0 +1,99 @@
+DECLARE @search varchar(30) = 'Match%'; 
+
+DECLARE @CurrentDate date; 
+SET @CurrentDate = GETDATE(); 
+
+SELECT YEAR(orderdate) AS currentyear, YEAR(orderdate) + 1 AS nextyear 
+FROM Sales.Orders;
+
+CREATE TABLE table1 (col1 int); 
+GO;
+CREATE VIEW view1 as SELECT * FROM table1; 
+
+DECLARE @cust int = 5; 
+GO
+SELECT custid, companyname, contactname 
+FROM Sales.Customers 
+WHERE custid = @custid;
+
+Фильтрация данных (в предложениях WHERE и HAVING).
+Предоставление условной логики выражениям РЕГИСТРА.
+Объединение таблиц (в фильтре ON).
+Определение подзапросов (например, в тестах EXISTS).
+
+
+USE TSQL; 
+SELECT EmployeeId, YEAR(OrderDate) AS 
+OrderYear 
+FROM Sales.Orders 
+WHERE CustomerId = 71 
+GROUP BY EmployeeId, YEAR(OrderDate) 
+HAVING COUNT(*) > 1 
+ORDER BY EmployeeId, OrderYear; 
+
+USE TSQL;
+GO
+CREATE TABLE dbo.Orders
+	( 
+		OrderId int, 
+		CustId int, 
+		OrderDate date,
+		Quantity int,
+		Amount money
+	); 
+	GO 
+INSERT INTO dbo.Orders
+VALUES(101,774,GETDATE(),100,99.98)
+      ,(102,775,GETDATE(),32,49.99)
+	  ,(103,775,GETDATE(),4,9.99);
+ SELECT OrderId, CustId, OrderDate, Quantity, Amount
+FROM dbo.Orders;
+SELECT OrderId, CustId, OrderDate, Quantity, Amount
+FROM dbo.Orders
+WHERE Quantity > 50;
+SELECT OrderId, CustId, OrderDate, Quantity, Amount
+FROM dbo.Orders
+WHERE OrderDate < SYSDATETIME();
+DECLARE @CustomerId int = 775
+SELECT OrderId, CustId, OrderDate, Quantity, Amount
+FROM dbo.Orders
+WHERE CustId = @CustomerId;
+IF OBJECT_ID('dbo.orders') IS NOT NULL DROP TABLE dbo.orders;
+
+USE AdventureWorksLT;
+GO
+SELECT	ProductID
+		,UnitPrice
+		,SUM(OrderQty) as 'TotalOrdered'
+FROM SalesLT.SalesOrderDetail
+WHERE UnitPrice > 50
+GROUP BY ProductID, UnitPrice
+HAVING SUM(OrderQty) > 19
+ORDER BY TotalOrdered DESC;
+SELECT *
+FROM SalesLT.SalesOrderDetail;
+SELECT *
+FROM SalesLT.SalesOrderDetail
+WHERE UnitPrice > 50
+GROUP BY ProductID, UnitPrice;
+SELECT	ProductID
+		,UnitPrice
+		,SUM(OrderQty) as 'TotalOrdered'
+FROM SalesLT.SalesOrderDetail
+WHERE UnitPrice > 50
+GROUP BY ProductID, UnitPrice;
+SELECT	ProductID
+		,UnitPrice
+		,SUM(OrderQty) as 'TotalOrdered'
+FROM SalesLT.SalesOrderDetail
+WHERE UnitPrice > 50
+GROUP BY ProductID, UnitPrice
+HAVING SUM(OrderQty) > 19;
+SELECT	ProductID
+		,UnitPrice
+		,SUM(OrderQty) as 'TotalOrdered'
+FROM SalesLT.SalesOrderDetail
+WHERE UnitPrice > 50
+GROUP BY ProductID, UnitPrice
+HAVING SUM(OrderQty) > 19
+ORDER BY TotalOrdered DESC;
