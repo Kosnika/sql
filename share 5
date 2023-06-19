@@ -1,0 +1,135 @@
+use AdventureWorks
+go 
+UPDATE Sales.SalesOrderHeader 
+SET	OrderDate = DATEADD(d,SalesOrderID % 7000, '2008-06-01'),
+	ShipDate = DATEADD(d,7 + (SalesOrderID % 7000), '2008-06-08'),
+	DueDate = DATEADD(d,14 + (SalesOrderID % 7000), '2008-06-13');
+SELECT SalesOrderID, CustomerID, OrderDate
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate;
+SELECT SalesOrderID, CustomerID, MONTH(OrderDate) AS ordermonth
+FROM Sales.SalesOrderHeader
+ORDER BY ordermonth DESC;
+SELECT SalesOrderID, CustomerID, OrderDate
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate DESC;
+SELECT ModifiedDate, CustomerID, AccountNumber
+FROM Sales.Customer
+ORDER BY ModifiedDate DESC, CustomerID ASC;
+UPDATE Sales.SalesOrderHeader 
+SET OrderDate = '2008-06-01', 
+	ShipDate = '2008-06-08',
+	DueDate = '2008-06-13';
+  
+  
+  
+
+use AdventureWorks
+go
+UPDATE Sales.SalesOrderHeader 
+SET	OrderDate = DATEADD(d,SalesOrderID % 7000, '2008-06-01'),
+	ShipDate = DATEADD(d,7 + (SalesOrderID % 7000), '2008-06-08'),
+	DueDate = DATEADD(d,14 + (SalesOrderID % 7000), '2008-06-13');
+SELECT SalesOrderID, CustomerID, MONTH(OrderDate) AS ordermonth
+FROM Sales.SalesOrderHeader
+WHERE MONTH(OrderDate) = 9;
+SELECT SalesOrderID, CustomerID, MONTH(OrderDate) AS ordermonth
+FROM Sales.SalesOrderHeader
+WHERE ordermonth = 9;
+use tsql 
+go 
+SELECT Address, city
+FROM [Sales].[Customers]
+WHERE city = N'Madrid';
+SELECT SalesOrderID, OrderDate
+FROM Sales.SalesOrderHeader
+WHERE OrderDate > '2013-05-01';
+SELECT Address, city
+FROM [Sales].[Customers]
+WHERE City = N'Madrid' OR city = N'Nantes';
+SELECT Address, city
+FROM [Sales].[Customers]
+WHERE city IN (N'Berlin',N'Bern');
+SELECT Address, city
+FROM [Sales].[Customers]
+WHERE city NOT IN (N'Madrid',N'London');
+SELECT SalesOrderID, OrderDate
+FROM Sales.SalesOrderHeader
+WHERE OrderDate >= '20130501' AND OrderDate <= '20130601';
+use AdventureWorks
+go
+SELECT SalesOrderID, OrderDate
+FROM Sales.SalesOrderHeader
+WHERE OrderDate BETWEEN '20130501' AND '20130601';
+UPDATE Sales.SalesOrderHeader 
+SET OrderDate = '2008-06-01', 
+	ShipDate = '2008-06-08',
+	DueDate = '2008-06-13';
+  
+  
+
+use AdventureWorks
+go
+UPDATE Sales.SalesOrderHeader 
+SET	OrderDate = DATEADD(d,SalesOrderID % 7, '2008-06-01'),
+	ShipDate = DATEADD(d,7 + (SalesOrderID % 7), '2008-06-08'),
+	DueDate = DATEADD(d,14 + (SalesOrderID % 7), '2008-06-13');
+SELECT TOP (6) SalesOrderID, CustomerID, OrderDate     -- most recent 6 orders identical 
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate ASC;
+SELECT TOP (6) WITH TIES SalesOrderID, CustomerID, OrderDate    -- with duplicates 
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate ASC;
+SELECT TOP (10) PERCENT SalesOrderID, CustomerID, OrderDate  -- Top ten percent of rowcount by orderdate
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate ASC;
+SELECT TOP (6) SalesOrderID, CustomerID, OrderDate    --- without order by it can return any 6 rows 
+FROM Sales.SalesOrderHeader;
+-- OFFSET/FETCH examples
+-- First 10 rows only as
+-- alternative to SELECT TOP (10)
+SELECT SalesOrderID, CustomerID, OrderDate
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate ASC, SalesOrderID DESC
+OFFSET 0 ROWS FETCH FIRST 10 ROWS ONLY;
+-- Skips first 10 rows, returns rows 11-20
+SELECT SalesOrderID, CustomerID, OrderDate
+FROM Sales.SalesOrderHeader
+ORDER BY OrderDate ASC, SalesOrderID DESC
+OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY;
+UPDATE Sales.SalesOrderHeader 
+SET OrderDate = '2008-06-01', 
+	ShipDate = '2008-06-08',
+	DueDate = '2008-06-13';
+  
+  
+  
+  
+  
+
+use tsql
+go
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+ORDER BY fax;
+
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+WHERE fax <> N'A.'        -- not equal to 
+ORDER BY fax;
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+WHERE fax = N'A.'
+ORDER BY fax;
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+WHERE fax = NULL
+ORDER BY fax;
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+WHERE fax IS NULL
+ORDER BY fax;
+SELECT custid, contactname, contacttitle, address, fax
+FROM Sales.Customers
+WHERE fax IS NOT NULL
+ORDER BY fax;
