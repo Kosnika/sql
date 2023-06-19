@@ -1,0 +1,184 @@
+-- Demonstration A
+
+-- Step 1: 
+-- Switch the query window to use your copy of the AdventureWorksLT database
+
+-- Step 2: Use implicit conversion in a query
+-- Demonstrate implicit conversion from the lower type (varchar)
+-- to the higher (int)
+SELECT 1 + '2' AS result;
+
+-- Step 3: Use implicit conversion in a query
+-- Demonstrate implicit conversion from the lower type (varchar) 
+-- to the higher (int)
+-- NOTE: THIS WILL FAIL
+
+SELECT 1 + 'abc' AS result;
+
+-- Step 4: Use explicit conversion in a query
+
+SELECT CAST(1 AS VARCHAR(10)) + 'abc' AS result;
+--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Demonstration B
+
+-- Step 1:
+-- Switch the query window to use your copy of the AdventureWorksLT database
+use tsql
+go
+
+-- Step 2: Use collation in a query
+SELECT empid, LastName 
+FROM hr.Employees
+WHERE LastName COLLATE Latin1_General_CS_AS = N'Funk';
+
+-- Step 3a: Use a case sensitive collation in a query
+SELECT empid, LastName 
+FROM hr.Employees
+WHERE LastName COLLATE Latin1_General_BIN = N'funk';
+
+-- NOTE: this will return no results
+
+-- Step 3b:
+SELECT empid, LastName 
+FROM hr.Employees
+WHERE LastName COLLATE Latin1_General_BIN = N'Funk';
+-- NOTE: the change in this query from the previous query is the case of the search term
+
+-- Step 4: Using the CONCAT function to join strings
+SELECT empid, FirstName, LastName, 
+CONCAT(LastName, N', ' + FirstName) AS FullName 
+FROM Hr.Employees;
+
+-- Step 5: Use concatenation with + (plus) in a query
+SELECT empid, FirstName, LastName, 
+FirstName + N' ' + LastName AS FullName
+FROM hr.Employees;
+
+-- Step 6: Use string functions in a query
+-- FORMAT
+DECLARE @m money = 120.595
+SELECT @m AS unformatted_value, 
+FORMAT(@m,'C','zh-cn') AS zh_cn_currency,
+FORMAT(@m,'C','en-us') AS en_us_currency,
+FORMAT(@m,'C','de-de') AS de_de_currency;
+-- end FORMAT example
+
+SELECT SUBSTRING('Microsoft SQL Server',11,3) AS Result;
+SELECT LEFT('Microsoft SQL Server',9) AS left_example, RIGHT('Microsoft SQL Server',6) as right_example;
+
+SELECT LEN('Microsoft SQL Server     ') AS [LEN];
+SELECT DATALENGTH('Microsoft SQL Server     ') AS [DATALENGTH];
+
+SELECT CHARINDEX('SQL','Microsoft SQL Server') AS Result;
+
+SELECT REPLACE('Learning about T-SQL string functions','T-SQL','Transact-SQL') AS Result;
+
+SELECT UPPER('Microsoft SQL Server') AS UP, LOWER('Microsoft SQL Server') AS LOW;
+
+-- Step 7: Use the LIKE predicate in a query - the % (percent) character
+SELECT empid, country, region, address
+FROM hr.Employees;
+
+SELECT empid, country, region, address
+FROM hr.Employees
+WHERE Country LIKE N'US%';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Demonstration C
+
+-- Step 1:
+-- Switch the query window to use your copy of the AdventureWorksLT database
+
+-- Step 2: Display various current date and time functions
+
+SELECT
+	GETDATE()			AS [GetDate],
+	CURRENT_TIMESTAMP	AS [Current_Timestamp], --for ANSI SQL compatibility
+	GETUTCDATE()		AS [GetUTCDate],
+	SYSDATETIME()		AS [SYSDateTime],
+	SYSUTCDATETIME()	AS [SYSUTCDateTime],
+	SYSDATETIMEOFFSET()	AS [SYSDateTimeOffset];
+	
+-- Step 3: Display various functions which return a portion of a date or time
+SELECT DATENAME(weekday,'20150113');
+SELECT DAY('20150113') AS [Day], MONTH('20150113') AS [Month],YEAR('20150113') AS [Year];
+SELECT DATEPART(WEEKDAY,'20150113');
+
+	
+-- Step 4: Display various functions which return a date or time from parts
+SELECT DATETIMEFROMPARTS(2012,2,12,8,30,0,0) AS Result; --7 arguments
+SELECT DATETIME2FROMPARTS(2012,2,12,8,30,00,0,0) AS Result; -- 8 arguments
+SELECT DATEFROMPARTS(2012,2,12) AS Result; -- 3 arguments
+SELECT DATETIMEOFFSETFROMPARTS(2012,2,12,8,30,0,0,-7,0,0) AS Result;
+
+
+-- Step 5: Demonstrate DATEDIFF with  this to show difference in precision:
+SELECT DATEDIFF(millisecond, GETDATE(), SYSDATETIME()); 
+
+-- Step 6: Modify datetime with EOMONTH and DATEADD:
+SELECT DATEADD(day,2,'20150113');
+SELECT EOMONTH('20150113'); --return the end of the month in which this date occurs
+SELECT EOMONTH('20150113',2); --return the end of the month two months ahead of the this date
+
+-- Step 7: Use ISDATE to check validity of inputs:
+SELECT ISDATE('20150113'); --is valid
+SELECT ISDATE('20120230'); --February doesn't have 30 days
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
