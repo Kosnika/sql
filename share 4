@@ -1,0 +1,103 @@
+USE TSQL ; 
+GO 
+SELECT Sales.Orders.orderid, Sales.Orders.orderdate, 
+           Sales.OrderDetails.productid,Sales.OrderDetails.unitprice, 
+           Sales.OrderDetails.qty 
+FROM  Sales.Orders 
+JOIN Sales.OrderDetails
+ON Sales.Orders.orderid = Sales.OrderDetails.orderid ; 
+
+USE TSQL;
+GO
+SELECT c.companyname, o.orderdate
+FROM Sales.Customers AS c, Sales.Orders AS o
+WHERE c.custid = o.custid;
+SELECT c.companyname, o.orderdate
+FROM Sales.Customers AS c, Sales.Orders AS o;
+SELECT c.companyname, o.orderdate
+FROM Sales.Customers AS c 
+JOIN Sales.Orders AS o
+ON c.custid = o.custid;
+SELECT c.companyname, o.orderdate
+FROM Sales.Customers AS c JOIN Sales.Orders AS o;
+-- ON c.custid = o.custid
+
+
+USE TSQL;
+GO
+SELECT c.categoryid, c.categoryname, p.productid, p.productname
+FROM Production.Categories AS c
+JOIN Production.Products AS p
+ON c.categoryid = p.categoryid;
+SELECT e.city, e.country
+FROM Sales.Customers AS c
+JOIN HR.Employees AS e 
+ON c.city = e.city AND c.country = e.country;
+SELECT DISTINCT  e.city, e.country
+FROM Sales.Customers AS c
+JOIN HR.Employees AS e 
+ON c.city = e.city AND c.country = e.country;
+SELECT c.custid, c.companyname, o.orderid, o.orderdate-- , od.productid, od.qty
+FROM Sales.Customers AS c 
+JOIN Sales.Orders AS o
+ON c.custid = o.custid;
+-- JOIN Sales.OrderDetails od
+-- ON o.orderid = od.orderid;
+SELECT c.custid, c.companyname, o.orderid, o.orderdate, od.productid, od.qty
+FROM Sales.Customers AS c 
+JOIN Sales.Orders AS o
+ON c.custid = o.custid
+JOIN Sales.OrderDetails od
+ON o.orderid = od.orderid;
+
+USE AdventureWorks;
+GO
+SELECT c.CustomerID, soh.SalesOrderID
+FROM Sales.Customer c 
+JOIN Sales.SalesOrderHeader soh
+ON c.CustomerID = soh.CustomerID;
+SELECT *
+FROM Sales.Customer c 
+LEFT OUTER JOIN Sales.SalesOrderHeader soh
+ON c.CustomerID = soh.CustomerID;
+
+USE TSQL;
+GO
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers AS c
+LEFT OUTER JOIN Sales.Orders AS o
+ON c.custid =o.custid;
+USE TSQL;
+GO
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers AS c
+LEFT OUTER JOIN Sales.Orders AS o
+ON c.custid =o.custid
+WHERE o.orderid IS NULL;
+USE TSQL;
+GO
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers AS c
+RIGHT OUTER JOIN Sales.Orders AS o
+ON c.custid =o.custid;
+USE TSQL;
+GO
+SELECT c.custid, c.companyname, o.orderid, o.orderdate
+FROM Sales.Customers AS c
+RIGHT OUTER JOIN Sales.Orders AS o
+ON c.custid =o.custid
+WHERE c.custid IS NULL;
+
+
+USE TSQL;
+GO
+SELECT e.empid ,e.lastname as empname, e.title, e.mgrid, m.lastname as mgrname
+  FROM HR.Employees AS e
+  JOIN HR.Employees AS m
+  ON e.mgrid=m.empid;
+SELECT e.empid ,e.lastname as empname,e.title,e.mgrid, m.lastname as mgrname
+  FROM HR.Employees AS e
+  LEFT OUTER JOIN HR.Employees AS m
+  ON e.mgrid=m.empid;
+SELECT e1.firstname, e2.lastname
+FROM HR.Employees AS e1 CROSS JOIN HR.Employees AS e2;
