@@ -1,0 +1,5 @@
+CREATE TABLE HR.Employees ( EmployeeID int PRIMARY KEY, LastName nvarchar(25), FirstName nvarchar(25) ); 
+ GO 
+ INSERT INTO HR.Employees ( EmployeeID, LastName, FirstName ) 
+VALUES (121, N’O’’Neill, N‘Carlene’); 
+ GO 
