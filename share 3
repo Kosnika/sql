@@ -1,0 +1,74 @@
+SELECT unitprice, qty, (unitprice * qty) 
+FROM Sales.OrderDetails; 
+
+SELECT ALL country 
+FROM Sales.Customers; 
+
+SELECT DISTINCT country 
+FROM Sales.Customers; 
+
+SELECT orderid, unitprice, qty AS quantity 
+FROM Sales.OrderDetails; 
+SELECT orderid, unitprice, quantity = qty 
+FROM Sales.OrderDetails;
+
+Вы можете опустить ключевое слово AS и просто следовать за именем таблицы с псевдонимом:
+SELECT orderid, unitprice, qty 
+FROM Sales.OrderDetails OD; 
+
+SELECT OD.orderid, OD.unitprice, OD.qty AS Quantity 
+FROM Sales.OrderDetails AS OD; 
+
+SELECT productid, productname, categoryid, 
+        CASE categoryid 
+ WHEN 1 THEN 'Beverages' 
+ WHEN 2 THEN 'Condiments' 
+ WHEN 3 THEN 'Confections' 
+ ELSE 'Unknown Category' 
+       END AS categoryname 
+FROM Production.Categories 
+
+
+
+use AdventureWorks
+go
+SELECT *
+FROM Production.ProductCategory;
+SELECT ProductNumber, Name, Color, ListPrice
+FROM Production.Product;
+SELECT ProductID, Name, ListPrice, (ListPrice * 1.1)
+FROM Production.Product;
+SELECT SalesOrderID, ProductID, UnitPrice, OrderQty, (UnitPrice * OrderQty)
+FROM Sales.SalesOrderDetail;
+
+use AdventureWorks
+go
+SELECT Filename AS NAME, Title, Owner, DocumentSummary AS Documentation
+FROM Production.Document
+SELECT ProductID, Name, ListPrice, (ListPrice * 1.1) AS MarkUp
+FROM Production.Product
+SELECT SalesOrderNumber, PurchaseOrderNumber, CustomerID, YEAR(OrderDate) AS YearPurchased 
+FROM Sales.SalesOrderHeader
+SELECT P.ProductNumber, P.Name, P.Color
+FROM Production.Product AS P;
+
+
+SELECT ProductNumber, Name, ListPrice,
+	CASE Size
+		WHEN 'S' THEN 'Small'
+		WHEN 'M' THEN 'Medium'
+		WHEN 'L' THEN 'Large' 
+		WHEN 'XL' THEN 'Extra Large' 
+		ELSE Size
+	END AS Size
+FROM Production.Product
+where size is not null;
+
+SELECT ProductNumber, Name, 
+	CASE SafetyStockLevel
+		WHEN 1000 THEN 'Mountain Bikes'
+		WHEN 800 THEN 'Road Bikes'
+		WHEN 500 THEN 'Touring Bikes'
+		ELSE 'Bike Accessories'
+	END AS Category
+FROM Production.Product;
