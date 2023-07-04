@@ -1,0 +1,242 @@
+--INDEXES
+create index superheroes_name_idx 
+on superheroes(name)
+
+create index superhero_name_idx  --sorted 
+on superhero(appearances desc)
+
+create index superhero_name_idx  -- by two rows 
+on person(last_name, first_name)
+
+drop index person_name_idx    -- delete index 
+
+
+
+
+--- ФИЛЬТРАЦИЯ ДАННЫХ 
+select * from superheroes 
+where gender = 'Female Charachters'
+
+select * from superheroes 
+where year between 2000 and 2005
+
+select * from superheroes 
+where hair in ('Red Hair', 'Strawberry Blond Hair')
+
+select * from superheroes 
+where hair like '%Blonde%'  -- % - любое кол-во символов, _ - ровно один символ
+
+select * from superheroes 
+where gender = 'Female Characters' and align = 'Bad Characters'
+
+select * from superheroes 
+where hair not in ('Blond Hair', 'Black Hair')
+
+
+
+--СОРТИРОВКА ДАННЫХ 
+select * from superheroes 
+order by year 
+
+select * from superheroes 
+order by appearances DESC  --ASC
+
+select * from superheroes 
+where align = 'Bad Characters'
+order by appearances DESC
+
+select * from superheroes
+where align ='Bad Characters'
+and gender = 'Female Characters'
+order by appearances DESC
+LIMIT 5   -- топ 5 (ограничения)
+
+select * from superheroes 
+order by year, apperances 
+
+
+
+--Группировка данных 
+select hair, count(*) from superheroes 
+where gender = 'Female Characters' 
+--and count(*) > 10    -- mistake 
+group by hair
+
+select hair, count(*) from superheroes     --- the correct one!
+where gender = 'Female Characters' 
+grup by hair 
+having count(*) > 10
+--having count(*) between 50 and 300
+
+
+
+-- АГРЕГАТНЫЕ ФУНКЦИИ 
+select align, count(*), sum(appearances) 
+from superheroes
+group by align 
+
+
+select align, count(*), avg(appearances), 
+            sum(appearances) / count(*) as average 
+from superheroes
+group by align 
+
+
+select year, min(appearances), max(appearances) as max_ap
+from superheroes
+group by year
+order by max_ap desc 
+limit 5
+
+select count(*),
+      min(appearances),
+      max(appearances),
+      sum(appearances),
+      avg(appearances)
+from superheroes 
+
+
+
+
+--Декомпозиция + join
+ select products.name, products_types.type_name
+ from products join products_types 
+ on products.type_id = product_types.id
+ 
+select p.name, t.type_name 
+from products as p join product_types as t
+on p.type_id = t.id
+where t.type_name = 'Онлайн-курс'
+
+select p.name as product_name, t.type_name as product_type,
+      p.price as product_price
+from products as p join product_types as t
+on p.type_id = t.id
+where t.type_name = 'Вебинар'
+order by p.price desc
+
+
+
+select products.name, products_types.type_name
+from products left outer join product_types
+on products.type_id = product_types.id 
+
+
+select products.name, products_types.type_name
+from product_types right outer join products
+on products.type_id = product_types.id 
+ 
+
+select products.name, products_types.type_name
+from products full outer join product_types
+on products.type_id = product_types.id 
+
+
+
+--СХЕМЫ 
+select p.id, p.name, p.price, s.quantity, 
+        p.price * s.quantity as total
+from products as p join sales as s 
+on p.id = s.product_id
+join orders as o 
+on o.id = s.order_id
+where o.customer_id = 1
+
+
+---ПОДЗАПРОСЫ-----
+select id, name, price 
+from products 
+where price = (select max(price) from products)
+
+select id, name, price 
+from products 
+where id in (select product_id from sales)
+
+
+update products 
+set price = price + 500
+where type_id = (select id from product_types where type_name = 'Книга')
+
+
+--ТРАНЗАКЦИИ--
+*Транзакции - последовательность команд SQL,
+которые должны быть выплнены последовательно или
+не выполнены вообще 
+
+
+start transaction;
+update accounts set balance = balance - 15000
+where account_number = 1234567;
+
+update accounts set balance = balance + 15000
+where account_number = 9876543;
+commit; -- rollback (cancelation)
+
+
+
+--ОГРАНИЧЕНИЯ--
+create table superheroes(
+id int primary key,
+name varchar(100) unique not null,
+align varchar(30),
+eye varchar(30),
+hair varchar(30),
+gender vatchar(30),
+appearances int,
+year int,
+universe varchar(10)
+)
+
+create table sales (
+product_id int,
+order_id int,
+quantity int,
+primary key(product_id, order_id)
+)
+
+create table products(
+id primary key,
+name varchar(30),
+type_id int, 
+price int check(price >= 0)
+)
+
+create table products(
+id primary key,
+name varchar(30),
+type_id int, 
+price int constraint positive_price --- naming constraints  
+check(price >= 0)  
+-- constraint positive_price check (price >= 0)
+)
+
+
+create table products(
+id primary key,
+name varchar(100),
+type_id int references product_types(id) 
+          on delete restrict, -- on delete cascade 
+price int 
+)
+
+create table products(
+id primary key,
+name varchar(100),
+type_id int, 
+price int, 
+foreign key(type_id) references product_types(id)
+)
+
+create table sales(
+product_id int references products(id),
+order_id int references orders(id),
+quantity int,
+primary key(product_id, order_id)
+)
+
+
+
+--ПРЕДСТАВЛЕНИЯ--
+create view customers_v id, name
+as select id, name from customers 
+select * from customers 
