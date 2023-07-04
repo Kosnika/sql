@@ -1,0 +1,70 @@
+create database Negmat;
+use Negmat;
+create schema polyclinic;
+go
+drop table if exists polyclinic.departments;
+go
+create table polyclinic.departments(
+id_dep int identity(1,1) primary key not null,
+building int not null check(building>=1 and building<=5),
+name_otdel varchar(100) unique not null,);
+go 
+
+drop table if exists polyclinic.surveyscreate 
+сreate table polyclinic.surveys(
+id_sur int identity(1,1) primary key not null ,
+name_sur varchar(100) unique not null,
+id_dep int references polyclinic.departments(id_dep));
+go
+drop table if exists polyclinic.specialization;
+create table polyclinic.specialization(
+id_sp int identity(1,1) primary key not null,
+specialization varchar(80) not null,
+);go
+drop table if exists polyclinic.diseases;
+create table polyclinic.diseases(id_dis int identity(1,1) not null, 
+nameof varchar(100) unique not null,
+difficult int default(1) check(difficult >=1), 
+ primary key (id_dis, difficult),);
+
+drop table if exists polyclinic.doctors;
+create table polyclinic.doctors(id_doc int identity(1,1) not null primary key, 
+id_dep int references polyclinic.departments(id_dep),
+id_sp int references polyclinic.specialization(id_sp),
+firstname varchar(50) not null,
+secondname varchar(50) not null,
+phone char(15),salary money not null check(salary >0),
+);
+drop table if exists polyclinic.examinations;
+create table polyclinic.examinations(
+id_ex int identity(1,1) not null primary key,iin varchar(12) not null,
+DayOf date not null,
+TimeOf varchar(11) not null,
+fk_sur int references polyclinic.surveys(id_sur),
+fk_doc int references polyclinic.doctors(id_doc),
+summary varchar(250) not null,);
+
+insert into polyclinic.departments(building, name_otdel)values
+  (2, 'lor'),  (1, 'hirurgiya'),
+  (1, 'pediatrya'),  (2,'oftalmologiya');
+  go
+ insert into polyclinic.surveys (name_sur, id_dep)values
+  ('osmotr', 4),  ('perelom ruki', 1),
+  ('lechenie glaz', 2);  go 
+insert into polyclinic.specialization(specialization)
+values   ('lor'),
+  ('pediatr'),  ('hirurg'),
+  ('oftalmolog');
+insert into polyclinic.diseases(nameof)
+values   ('problemy s nosom ili uchom'),
+  ('ploskostopie'),  ('koronavirus'),
+  ('problemy s pechen'),  ('orvi');
+  go
+insert into polyclinic.doctors(id_dep, id_sp, firstname, secondname, salary)values 
+  (1, 1, 'kuatov', 'zhaslan', 500000),  (1, 2, 'kayrola', 'aidana', 300000),
+  (2,3, 'kozlova', 'masha', 300000),  (2,4, 'kanat', 'alen', 400000);
+  go
+ insert into polyclinic.examinations(iin,dayof, timeof, FK_sur, FK_doc, summary)
+values    ('334235353461', '11-10-2019', '10:00-10:10', 2, 3, 'bbbbbbb'),
+    ('845793505942', '07-01-2021', '11:40-12:00', 3, 1, 'aaaaaa'),    ('087423450453', '01-25-2018', '08:00-08:20', 1, 2, 'bbbbxxx');
+    go
